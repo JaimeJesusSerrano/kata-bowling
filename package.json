@@ -1,5 +1,5 @@
 {
-  "name": "ts-eslint-prettier-jest-minimal",
+  "name": "kata-bowling",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -18,7 +18,7 @@
     "test:coverage": "npm run test -- --coverage",
     "check-updates": "ncu -u"
   },
-  "author": "Softwarecrafters.io",
+  "author": "Jaime Jesús Serrano",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^29.5.10",
