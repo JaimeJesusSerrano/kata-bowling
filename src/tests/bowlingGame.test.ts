@@ -13,7 +13,7 @@ describe('The Bowling Game', () => {
 
 	it('should be able to roll a ball', () => {
 		game.roll(0);
-		expect(game.rolls).toEqual([0]);
+		expect(game.calculateTotalScore()).toBe(0);
 	});
 
 	it('calculate the score for a given gutter all zeros game', () => {
@@ -45,6 +45,11 @@ describe('The Bowling Game', () => {
 	it('calculate the score for a given perfect game', () => {
 		rollMany(12, 10);
 		expect(game.calculateTotalScore()).toBe(300);
+	});
+
+	it('calculate the score for a given random game', () => {
+		rollMany(22, 5);
+		expect(game.calculateTotalScore()).toBe(150);
 	});
 
 	function rollMany(times: number, pins: number) {

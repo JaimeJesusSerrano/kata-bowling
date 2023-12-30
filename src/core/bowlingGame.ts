@@ -1,14 +1,16 @@
 export class BowlingGame {
 	private readonly MAX_SCORE_PER_FRAME = 10;
+	private readonly TOTAL_FRAMES = 10;
 
 	private rolls: number[] = [];
 
 	calculateTotalScore() {
-		const totalFrames = this.rolls.length;
+		const totalThrows = this.rolls.length;
 
 		let score = 0;
+		let currentFrame = 0;
 
-		for (let i = 0; i < totalFrames; i++) {
+		for (let i = 0; i < totalThrows && currentFrame !== this.TOTAL_FRAMES; i++, currentFrame++) {
 			const currentRoll: number = this.rolls[i];
 
 			const isStrike = this.isStrike(i);
@@ -24,7 +26,8 @@ export class BowlingGame {
 				continue;
 			}
 
-			score += currentRoll;
+			score += currentRoll + (this.rolls[i + 1] || 0);
+			i++;
 		}
 
 		return score;
