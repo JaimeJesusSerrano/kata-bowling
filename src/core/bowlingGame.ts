@@ -11,23 +11,13 @@ export class BowlingGame {
 		let currentFrame = 0;
 
 		for (let i = 0; i < totalThrows && currentFrame !== this.TOTAL_FRAMES; i++, currentFrame++) {
-			const currentRoll: number = this.rolls[i];
+			score += this.calculateNextScoreByThrow(i);
 
 			const isStrike = this.isStrike(i);
-			if (isStrike) {
-				score += this.getStrikeScore(i);
-				continue;
-			}
-
-			const isSpare = this.isSpare(i);
-			if (isSpare) {
-				score += this.getSpareScore(i);
+			// If there is not strike we need two throws to finish the frame
+			if (!isStrike) {
 				i++;
-				continue;
 			}
-
-			score += currentRoll + (this.rolls[i + 1] || 0);
-			i++;
 		}
 
 		return score;
@@ -45,16 +35,35 @@ export class BowlingGame {
 		return this.rolls[frame] === this.MAX_SCORE_PER_FRAME;
 	}
 
-	private getSpareScore(frame: number) {
+	private getBasicScoreByThrow(frame: number) {
+		const nextFrame = this.rolls[frame + 1] || 0;
+		return this.rolls[frame] + nextFrame;
+	}
+
+	private getSpareScoreByThrow(frame: number) {
 		const nextFrame = this.rolls[frame + 1] || 0;
 		const nextNextFrame = this.rolls[frame + 2] || 0;
 		return this.rolls[frame] + nextFrame + nextNextFrame;
 	}
 
-	private getStrikeScore(frame: number) {
+	private getStrikeScoreByThrow(frame: number) {
 		const nextFrame = this.rolls[frame + 1] || 0;
 		const nextNextFrame = this.rolls[frame + 2] || 0;
 		return this.rolls[frame] + nextFrame + nextNextFrame;
+	}
+
+	private calculateNextScoreByThrow(frame: number) {
+		const isStrike = this.isStrike(frame);
+		if (isStrike) {
+			return this.getStrikeScoreByThrow(frame);
+		}
+
+		const isSpare = this.isSpare(frame);
+		if (isSpare) {
+			return this.getSpareScoreByThrow(frame);
+		}
+
+		return this.getBasicScoreByThrow(frame);
 	}
 }
 
