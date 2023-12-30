@@ -1,37 +1,4 @@
-// import { calculateBowlingScore } from '../core/bowlingGame';
-
-class BowlingGame {
-	TOTAL_BOWLS = 10;
-	rolls: number[] = [];
-
-	calculateTotalScore() {
-		const totalThrows = this.rolls.length;
-		let score = 0;
-		let isDoubleScore = false;
-
-		for (let i = 0; i < totalThrows; i++) {
-			const currentRoll = this.rolls[i];
-			const previousRoll = i === 0 ? undefined : this.rolls[i - 1];
-
-			if (isDoubleScore) {
-				score += currentRoll * 2;
-				isDoubleScore = false;
-			} else {
-				score += currentRoll;
-			}
-
-			if (currentRoll === this.TOTAL_BOWLS || (previousRoll && previousRoll + currentRoll === this.TOTAL_BOWLS)) {
-				isDoubleScore = true;
-			}
-		}
-
-		return score;
-	}
-
-	roll(pins: number) {
-		this.rolls.push(pins);
-	}
-}
+import BowlingGame from '../core/bowlingGame';
 
 describe('The Bowling Game', () => {
 	let game: BowlingGame;
@@ -65,6 +32,19 @@ describe('The Bowling Game', () => {
 		game.roll(5);
 		rollMany(17, 0);
 		expect(game.calculateTotalScore()).toBe(20);
+	});
+
+	it('calculate the score for a given strike and some extra ball', () => {
+		game.roll(10);
+		game.roll(2);
+		game.roll(3);
+		rollMany(16, 0);
+		expect(game.calculateTotalScore()).toBe(20);
+	});
+
+	it('calculate the score for a given perfect game', () => {
+		rollMany(12, 10);
+		expect(game.calculateTotalScore()).toBe(300);
 	});
 
 	function rollMany(times: number, pins: number) {
